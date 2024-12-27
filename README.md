@@ -12,7 +12,7 @@ A biometric authentication system built using Flask and ngrok. Users can upload 
 - **ngrok.license**: ngrok license file.
 - **1.png**: Project logo.
 ## Setup
-(Screenshots/Auth.PNG)
+![Auth](Screenshots/Auth.PNG)
 1. Install dependencies from `installations.txt`:
    ```bash
    !pip install -r installations.txt
