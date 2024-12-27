@@ -1,0 +1,6 @@
+!pip install pytesseract
+!apt-get update
+!apt-get install -y tesseract-ocr
+!pip install Pillow
+!pip install flask
+!pip install pyngrok
