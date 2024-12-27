@@ -1,6 +1,6 @@
 # SUBNET Authentication System
 
-![SUBNET Authentication](Screenshots/cover.png)
+![SUBNET Authentication](Screenshots/Cover.png)
 
 ## Overview
 A biometric authentication system built using Flask and ngrok. Users can upload images for authentication by comparing them to stored reference images.
