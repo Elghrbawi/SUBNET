@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUBNET Authentication System</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+:root { --primary-color: #2E294E; --secondary-color: #D1D1E9; --bg-dark: #1B1725; --bg-panel: #2E294E; --text-primary: #E8C2CA; --text-secondary: #D1D1E9; --accent: #FFB3C6; --highlight: #00FF94; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'VT323', monospace; background-color: var(--bg-dark); color: var(--text-primary); line-height: 1.6; padding: 20px; font-size: 18px; min-height: 100vh; }
+.container { max-width: 1400px; margin: 0 auto; padding: 40px; }
+.welcome-container { text-align: center; margin-bottom: 50px; }
+.welcome-message { color: var(--accent); font-size: 32px; letter-spacing: 2px; height: 40px; margin-bottom: 20px; }
+.user-message { color: var(--text-secondary); font-size: 24px; letter-spacing: 1px; }
+.highlight { color: var(--highlight); font-weight: bold; text-shadow: 0 0 5px var(--highlight); }
+.header { text-align: center; margin-bottom: 60px; position: relative; }
+.logo { color: var(--text-secondary); font-size: 20px; margin-bottom: 30px; white-space: pre; }
+.logout-btn { float: right; background-color: var(--primary-color); color: var(--accent); border: 2px solid var(--accent); padding: 10px 20px; cursor: pointer; font-family: 'VT323', monospace; font-size: 1.2em; letter-spacing: 2px; transition: all 0.3s ease; }
+.logout-btn:hover { background-color: var(--accent); color: var(--primary-color); }
+.panel { background-color: var(--bg-panel); border: 2px solid var(--text-secondary); padding: 40px; margin-bottom: 50px; position: relative; overflow: hidden; }
+.panel::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--accent), var(--text-secondary)); }
+.panel-title { color: var(--text-secondary); margin-bottom: 30px; text-align: center; font-size: 1.8em; letter-spacing: 3px; }
+.file-input-container { position: relative; margin: 30px 0; }
+.file-input { display: none; }
+.file-label { display: inline-block; padding: 15px 30px; background-color: var(--primary-color); color: var(--text-primary); border: 2px solid var(--text-secondary); cursor: pointer; width: 100%; max-width: 400px; text-align: center; letter-spacing: 1px; transition: all 0.3s ease; font-size: 1.2em; }
+.file-label:hover { background-color: var(--text-secondary); color: var(--primary-color); }
+.submit-btn { background-color: var(--primary-color); color: var(--text-primary); border: 2px solid var(--text-secondary); padding: 15px 30px; cursor: pointer; width: 100%; max-width: 400px; font-family: 'VT323', monospace; font-size: 1.4em; letter-spacing: 2px; transition: all 0.3s ease; }
+.submit-btn:hover { background-color: var(--text-secondary); color: var(--primary-color); }
+.ref-type-select { width: 100%; max-width: 400px; padding: 15px; background-color: var(--primary-color); color: var(--text-primary); border: 2px solid var(--text-secondary); font-family: 'VT323', monospace; margin-bottom: 30px; font-size: 1.3em; letter-spacing: 1px; }
+.image-preview { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+.preview-container { text-align: center; background: var(--primary-color); padding: 25px; border: 2px solid var(--text-secondary); }
+.preview-container img { max-width: 100%; height: auto; border: 2px solid var(--accent); margin-top: 20px; }
+.result-panel { margin-top: 40px; padding: 30px; border: 2px solid var(--accent); background-color: var(--bg-panel); text-align: center; letter-spacing: 1px; font-size: 1.3em; }
+@media (max-width: 768px) {
+    .container { padding: 20px; }
+    .logo { font-size: 16px; }
+    .welcome-message { font-size: 24px; }
+    .panel { padding: 25px; }
+    .logout-btn { position: relative; top: auto; right: auto; display: block; margin: 20px auto; }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-container">
+            <div class="welcome-message" id="welcome-msg">
+                [INITIALIZING SUBNET PROTOCOL...]
+            </div>
+            <div class="user-message" id="user-status"></div>
+        </div>
+
+        <div class="header">
+            <pre class="logo">
+ ____  _   _ ____  _   _ _____ _____ 
+/ ___|| | | | __ )| \ | | ____|_   _|
+\___ \| | | |  _ \|  \| |  _|   | |  
+ ___) | |_| | |_) | |\  | |___  | |_ 
+|____/ \___/|____/|_| \_|_____| |_(_)
+                                
+            </pre>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">[BIOMETRIC RECEPTOR]</div>
+            <form method="POST" enctype="multipart/form-data" onsubmit="window.scrollTo(0,0)">
+                <div class="file-input-container">
+                    <label for="auth-file" class="file-label">SELECT AUTH IMAGE</label>
+                    <input id="auth-file" class="file-input" type="file" name="file" accept="image/*" required>
+                </div>
+                <button type="submit" class="submit-btn">INITIATE AUTH SEQUENCE</button>
+            </form>
+        </div>
+
+        {% if show_admin %}
+        <div class="panel">
+            <div class="panel-title">[ADMIN CONTROL MATRIX]</div>
+            <form method="POST" enctype="multipart/form-data" onsubmit="window.scrollTo(0,0)">
+                <button class="logout-btn" onclick="handleLogout()">LOGOUT</button>
+                <select name="ref_type" class="ref-type-select" required>
+                    <option value="admin">Update Admin Signature</option>
+                    <option value="user">Update User Signature</option>
+                </select>
+                <div class="file-input-container">
+                    <label for="ref-file" class="file-label">SELECT NEW REFERENCE</label>
+                    <input id="ref-file" class="file-input" type="file" name="file" accept="image/*" required>
+                </div>
+                <input type="hidden" name="update_ref" value="1">
+                <button type="submit" class="submit-btn">UPDATE REFERENCE</button>
+            </form>
+            <div class="image-preview">
+                <div class="preview-container">
+                    <div>Current Admin Reference:</div>
+                    <img src="{{ url_for('get_reference', user_type='admin') }}?t={{ timestamp if timestamp else '0' }}" alt="Admin Reference">
+                </div>
+                <div class="preview-container">
+                    <div>Current User Reference:</div>
+                    <img src="{{ url_for('get_reference', user_type='user') }}?t={{ timestamp if timestamp else '0' }}" alt="User Reference">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if result %}
+        <div class="result-panel">
+            <div>[AUTH MATRIX RESPONSE]</div>
+            {{ result }}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        const welcomeMessages = {
+            user: [
+                "WELCOME USER [CLEARANCE LEVEL: STANDARD]",
+                "INITIATING BIOMETRIC SCAN...",
+                "SECURITY PROTOCOLS ACTIVE"
+            ],
+            admin: [
+                "WELCOME ADMINISTRATOR [CLEARANCE LEVEL: MAXIMUM]",
+                "FULL SYSTEM ACCESS GRANTED",
+                "CONTROL MATRIX ENABLED"
+            ]
+        };
+
+        function typeWriter(messages, index = 0, charIndex = 0) {
+            const welcomeMsg = document.getElementById('welcome-msg');
+            if (index >= messages.length) {
+                setTimeout(() => typeWriter(messages), 3000);
+                index = 0;
+                return;
+            }
+            if (charIndex === 0) {welcomeMsg.textContent = '';}
+            if (charIndex < messages[index].length) {
+                welcomeMsg.textContent += messages[index].charAt(charIndex);
+                setTimeout(() => typeWriter(messages, index, charIndex + 1), 50);}
+            else {setTimeout(() => typeWriter(messages, index + 1), 2000);}
+        }
+
+        function handleLogout() {window.location.href = window.location.href;}
+        document.querySelectorAll('.file-input').forEach(input => {
+            input.addEventListener('change', function() {
+                const label = this.previousElementSibling;
+                label.textContent = this.files[0] ? this.files[0].name : 'SELECT FILE';
+            });
+        });
+
+        const isAdmin = {% if show_admin %}true{% else %}false{% endif %};
+        typeWriter(isAdmin ? welcomeMessages.admin : welcomeMessages.user);
+    </script>
+</body>
+</html>
